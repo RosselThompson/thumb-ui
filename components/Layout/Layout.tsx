@@ -1,5 +1,5 @@
 import React from 'react';
-import { ILayout } from '../types/Interfaces/Layout/ILayout';
+import { ILayout } from 'types/Interfaces/Layout/ILayout';
 import { Content } from './Content/Content';
 import { Footer } from './Footer/Footer';
 import { Header } from './Header/Header';
