@@ -8,4 +8,9 @@ describe('Test Header component', () => {
     render(<Header />);
     expect(spy).not.toHaveBeenCalled();
   });
+
+  it('should render component with title', () => {
+    const { getByText } = render(<Header />);
+    expect(getByText('Pope Francis?')).toBeTruthy();
+  });
 });

@@ -7,8 +7,9 @@ export const Content: React.FC<IContent> = (props): JSX.Element => {
   return (
     <>
       <BannerTop />
-      {children}
+      <main role="main">{children}</main>
       <BannerBottom />
+      <hr role="separator" />
     </>
   );
 };
