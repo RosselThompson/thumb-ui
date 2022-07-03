@@ -1,0 +1,26 @@
+.thumbs {
+  width: 16px;
+  padding: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.thumbs__up {
+  background-color: var(--color-green);
+}
+
+.thumbs__down {
+  background-color: var(--color-yellow);
+}
+
+.thumbs__button {
+  cursor: pointer;
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.thumbs__button__selected {
+  border: 1px solid var(--color-white);
+}
