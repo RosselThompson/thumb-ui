@@ -1,10 +1,20 @@
-import { IButton } from 'types/Interfaces/Button/IButton';
+import { Loader } from 'components/Loader/Loader';
+import { IButtonProps } from 'types/Interfaces/Button/IButton';
 
-export const Button: React.FC<IButton> = (prop): JSX.Element => {
-  const { text, isDisabled } = prop;
+export const Button: React.FC<IButtonProps> = (prop): JSX.Element => {
+  const { text, isDisabled, isLoading, onClick } = prop;
   return (
-    <button className="myButton" disabled={isDisabled}>
-      {text}
+    <button
+      className="btn"
+      disabled={isDisabled || isLoading}
+      onClick={onClick}>
+      {isLoading ? (
+        <div className="flex justify-center">
+          <Loader theme="dark" size="sm" />
+        </div>
+      ) : (
+        text
+      )}
     </button>
   );
 };

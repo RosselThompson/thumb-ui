@@ -1,8 +1,8 @@
-import { IContent } from 'types/Interfaces/Layout/IContent';
+import { IContentProps } from 'types/Interfaces/Layout/IContent';
 import { BannerBottom } from './BannerBottom/BannerBottom';
 import { BannerTop } from './BannerTop/BannerTop';
 
-export const Content: React.FC<IContent> = (props): JSX.Element => {
+export const Content: React.FC<IContentProps> = (props): JSX.Element => {
   const { children } = props;
   return (
     <>

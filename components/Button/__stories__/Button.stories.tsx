@@ -1,13 +1,13 @@
 import { Story, Meta } from '@storybook/react/types-6-0';
 import { Button } from 'components/Button/Button';
-import { IButton } from 'types/Interfaces/Button/IButton';
+import { IButtonProps } from 'types/Interfaces/Button/IButton';
 
 const MetaObject: Meta = {
   title: 'Controls/Button',
   component: Button,
 };
 
-const Template: Story<IButton> = (args) => <Button {...args} />;
+const Template: Story<IButtonProps> = (args) => <Button {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

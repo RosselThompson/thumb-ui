@@ -1,0 +1,25 @@
+.btn {
+  cursor: pointer;
+  background-color: var(--color-darker-background);
+  width: 107px;
+  height: 38px;
+  padding: 10px 4.6px;
+  border: 1px solid var(--color-white);
+  transition: color 0.3s ease;
+
+  color: var(--color-white);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 18px;
+
+  &:hover {
+    color: darken($color: #fff, $amount: 10);
+  }
+
+  &:disabled {
+    cursor: auto;
+    &:hover {
+      color: darken($color: #fff, $amount: 0);
+    }
+  }
+}
