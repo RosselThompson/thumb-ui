@@ -11,7 +11,6 @@ const Template: Story<IDropdownProps> = (args) => <Dropdown {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
-  name: 'view',
   fields: [
     { value: 'option1', label: 'Option1' },
     { value: 'option2', label: 'Option2' },
