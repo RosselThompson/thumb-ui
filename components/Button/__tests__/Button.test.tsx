@@ -5,7 +5,7 @@ import { Button } from '../Button';
 const textTest = 'Test Button';
 const onClickTest = jest.fn();
 
-describe('Test Content component', () => {
+describe('Test Button component', () => {
   it('should render component without console error', () => {
     const spy = jest.spyOn(global.console, 'error');
     render(<Button text={textTest} />);

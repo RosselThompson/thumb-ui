@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { render } from '@testing-library/react';
 import { Loader } from '../Loader';
 
-describe('Test Content component', () => {
+describe('Test Loader component', () => {
   it('should render component without console error', () => {
     const spy = jest.spyOn(global.console, 'error');
     render(<Loader theme="light" size="sm" />);
