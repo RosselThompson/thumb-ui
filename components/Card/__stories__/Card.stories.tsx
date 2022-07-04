@@ -40,4 +40,18 @@ Loading.args = {
   isLoading: true,
 };
 
+export const TabletList = Template.bind({});
+TabletList.args = {
+  ...mock,
+  design: 'list',
+  size: 'md',
+};
+
+export const DesktopList = Template.bind({});
+DesktopList.args = {
+  ...mock,
+  design: 'list',
+  size: 'lg',
+};
+
 export default MetaObject;

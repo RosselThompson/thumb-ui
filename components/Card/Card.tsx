@@ -7,6 +7,8 @@ import { ThumbsType } from 'types/Types/Thumbs';
 import { capitalize } from 'utils/Capitalize';
 import { getPercentage } from 'utils/Percentage';
 import { getTimeStr } from 'utils/Time';
+import { getPrefixClassName } from 'utils/CardPrefix';
+import { getImageName } from 'utils/FileName';
 
 export const Card: React.FC<ICardProps> = (props): JSX.Element => {
   const {
@@ -19,6 +21,8 @@ export const Card: React.FC<ICardProps> = (props): JSX.Element => {
     isVotePosted,
     isLoading,
     onClick,
+    design = 'grid',
+    size = 'sm',
   } = props;
 
   const [votedFlag, setvotedFlag] = useState<boolean>(isVotePosted);
@@ -26,6 +30,10 @@ export const Card: React.FC<ICardProps> = (props): JSX.Element => {
     undefined
   );
 
+  const prefixClassName = getPrefixClassName(design, size);
+  const picName = `url(/images/people/${getImageName(picture)}${
+    size === 'lg' ? '@2x' : ''
+  }.png)`;
   const cardButtonsClassName = votedFlag ? 'justify-end' : 'justify-between';
 
   const voteText = votedFlag ? 'Vote again' : 'Vote Now';
@@ -61,47 +69,56 @@ export const Card: React.FC<ICardProps> = (props): JSX.Element => {
 
   return (
     <div
-      className="card"
+      className={prefixClassName}
       style={{
-        backgroundImage: `url(/images/people/${picture})`,
+        backgroundImage: picName,
       }}>
-      <div className="card__filter">
-        <div className="card__container">
-          <div className="card__side-thumb">
+      <div className={`${prefixClassName}__filter`}>
+        <div className={`${prefixClassName}__container`}>
+          <div className={`${prefixClassName}__side-thumb`}>
             <Thumbs type={thumbsAvergage} />
           </div>
-          <div className="card__content">
-            <p className="card__name">{name}</p>
-            <p className="card__description">{description}</p>
-            <p className="card__timestamp">{timestamp}</p>
-            <div className={`card__buttons ${cardButtonsClassName}`}>
-              {!votedFlag && (
-                <>
-                  <Thumbs
-                    type="up"
-                    isButton
-                    isSelected={isSelectedThumbUp}
-                    onClick={onClickThumbsUp}
-                  />
-                  <Thumbs
-                    type="down"
-                    isButton
-                    isSelected={isSelectedThumbDown}
-                    onClick={onClickThumbsDown}
-                  />
-                </>
-              )}
-              <Button
-                text={voteText}
-                isDisabled={isDisabledVote}
-                isLoading={isLoading}
-                onClick={onClickVoteButton}
-              />
+          <div className={`${prefixClassName}__content`}>
+            <div className={`${prefixClassName}__text`}>
+              <p className={`${prefixClassName}__name`}>{name}</p>
+              <p className={`${prefixClassName}__description`}>{description}</p>
+            </div>
+            <div className={`${prefixClassName}__buttons-container`}>
+              <p className={`${prefixClassName}__timestamp`}>{timestamp}</p>
+              <div
+                className={`${prefixClassName}__buttons ${cardButtonsClassName}`}>
+                {!votedFlag && (
+                  <>
+                    <Thumbs
+                      type="up"
+                      isButton
+                      isSelected={isSelectedThumbUp}
+                      onClick={onClickThumbsUp}
+                    />
+                    <Thumbs
+                      type="down"
+                      isButton
+                      isSelected={isSelectedThumbDown}
+                      onClick={onClickThumbsDown}
+                    />
+                  </>
+                )}
+                <Button
+                  text={voteText}
+                  isDisabled={isDisabledVote}
+                  isLoading={isLoading}
+                  onClick={onClickVoteButton}
+                />
+              </div>
             </div>
           </div>
         </div>
-        <div className="card__footer">
-          <GaugeBar positive={votes.positive} negative={votes.negative} />
+        <div className={`${prefixClassName}__footer`}>
+          <GaugeBar
+            positive={votes.positive}
+            negative={votes.negative}
+            size={size}
+          />
         </div>
       </div>
     </div>
