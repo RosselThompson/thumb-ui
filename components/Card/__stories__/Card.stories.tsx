@@ -48,7 +48,7 @@ TabletList.args = {
 };
 
 export const TabletGrid = Template.bind({});
-TabletList.args = {
+TabletGrid.args = {
   ...mock,
   design: 'grid',
   size: 'md',
@@ -62,7 +62,7 @@ DesktopList.args = {
 };
 
 export const DesktopGrid = Template.bind({});
-DesktopList.args = {
+DesktopGrid.args = {
   ...mock,
   design: 'grid',
   size: 'lg',

@@ -32,7 +32,7 @@ export const Card: React.FC<ICardProps> = (props): JSX.Element => {
 
   const prefixClassName = getPrefixClassName(design, size);
   const picName = `url(/images/people/${getImageName(picture)}${
-    size === 'lg' ? '@2x' : ''
+    size === 'lg' || size === 'md' ? '@2x' : ''
   }.png)`;
   const cardButtonsClassName = votedFlag ? 'justify-end' : 'justify-between';
 
@@ -117,7 +117,7 @@ export const Card: React.FC<ICardProps> = (props): JSX.Element => {
           <GaugeBar
             positive={votes.positive}
             negative={votes.negative}
-            size={size}
+            size={design === 'grid' ? 'sm' : size}
           />
         </div>
       </div>
