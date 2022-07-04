@@ -25,7 +25,7 @@ export const GaugeBar: React.FC<IGaugeBarProps> = (props): JSX.Element => {
         <p
           className={`${
             size === 'lg' ? 'gaugebar__text-lg' : 'gaugebar__text'
-          } ml-1.5`}>
+          } mr-1.5`}>
           {negativeValue}
         </p>
         <Image
