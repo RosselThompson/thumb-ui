@@ -12,6 +12,7 @@ import { getImageName } from 'utils/FileName';
 
 export const Card: React.FC<ICardProps> = (props): JSX.Element => {
   const {
+    id,
     name,
     description,
     category,
@@ -63,7 +64,7 @@ export const Card: React.FC<ICardProps> = (props): JSX.Element => {
     if (votedFlag) {
       toogleVotedFlag();
     } else {
-      onClick(selectedThumbs);
+      onClick(id, selectedThumbs);
     }
   };
 

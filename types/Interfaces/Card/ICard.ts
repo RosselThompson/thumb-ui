@@ -7,6 +7,7 @@ interface IVote {
   negative: number;
 }
 export interface ICardProps {
+  id: number;
   name: string;
   description: string;
   category: string;
@@ -15,7 +16,7 @@ export interface ICardProps {
   votes: IVote;
   isVotePosted: boolean;
   isLoading: boolean;
-  onClick: (value: ThumbsType | undefined) => void;
+  onClick: (id: number, value: ThumbsType | undefined) => void;
   design?: DesignType;
   size?: Sizes;
 }

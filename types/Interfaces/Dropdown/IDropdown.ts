@@ -5,5 +5,5 @@ export interface IDropdownField {
 
 export interface IDropdownProps {
   fields: IDropdownField[];
-  onChange: () => void;
+  onChange: (values: IDropdownField) => void;
 }

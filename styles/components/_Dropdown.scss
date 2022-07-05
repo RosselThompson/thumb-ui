@@ -1,6 +1,7 @@
 .dropdown {
   &__control {
     border: 2px solid var(--color-black) !important;
+    border-radius: 0 !important;
     &--is-focused {
       box-shadow: none !important;
     }

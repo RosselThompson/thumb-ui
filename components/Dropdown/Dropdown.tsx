@@ -1,6 +1,9 @@
 import Image from 'next/image';
 import Select, { components } from 'react-select';
-import { IDropdownProps } from 'types/Interfaces/Dropdown/IDropdown';
+import {
+  IDropdownField,
+  IDropdownProps,
+} from 'types/Interfaces/Dropdown/IDropdown';
 
 export const Dropdown: React.FC<IDropdownProps> = (props) => {
   const { fields, onChange } = props;
@@ -21,7 +24,7 @@ export const Dropdown: React.FC<IDropdownProps> = (props) => {
       }}
       options={fields}
       classNamePrefix="dropdown"
-      onChange={onChange}
+      onChange={(newValue) => onChange(newValue as IDropdownField)}
       defaultValue={fields[0]}
     />
   );
