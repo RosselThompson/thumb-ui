@@ -67,7 +67,7 @@ export const mockData = [
       positive: 1237,
       negative: 894,
     },
-    isVotePosted: false,
+    isVotePosted: true,
   },
   {
     id: 6,

@@ -13,7 +13,7 @@
 .gaugebar__positive {
   background-color: var(--color-green);
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   padding-right: 4px;
   padding-left: 12px;
@@ -23,7 +23,7 @@
   flex: 1;
   background-color: var(--color-yellow);
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   align-items: center;
   padding-left: 4px;
   padding-right: 12px;
