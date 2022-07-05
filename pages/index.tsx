@@ -15,10 +15,11 @@ import { IPersonInfo } from 'types/Interfaces/Data/IData';
 import { DropdownFields } from 'constants/DropdownFields';
 import { getHomeCardsClassName } from 'utils/HomeCardClass';
 import { getViewportSize } from 'utils/ViewportSize';
+import { updatePerson } from 'services/People';
 
 const Home: NextPage = () => {
   const { width } = useDimensions();
-  const { data, error } = useSwr(apiPeople, fetcher);
+  const { data, error, mutate } = useSwr(apiPeople, fetcher);
   const [loadingButton, setloadingButton] = useState<string>('');
   const [peopleData, setpeopleData] = useState<IPersonInfo[]>([]);
   const [design, setdesign] = useState<DesignType>('list');
@@ -29,13 +30,13 @@ const Home: NextPage = () => {
   const onChangeDropdown = (value: IDropdownField) =>
     setdesign(value.value as DesignType);
 
-  const onClickVote = (id: number, value: ThumbsType | undefined) => {
+  const onClickVote = async (id: number, value: ThumbsType | undefined) => {
     setloadingButton(`${id}-loading`);
-    setTimeout(() => {
-      const newData = updateData(id, value);
-      setpeopleData(newData);
-      setloadingButton('');
-    }, 1000);
+    const newData = updateData(id, value);
+    const person = newData.find((e) => e.id === id);
+    await updatePerson(id, person as IPersonInfo);
+    await mutate(newData);
+    setloadingButton('');
   };
 
   const updateData = (id: number, value: ThumbsType | undefined) =>
@@ -43,13 +44,13 @@ const Home: NextPage = () => {
       if (e.id === id && value === 'up')
         return {
           ...e,
-          isVotePosted: !e.isVotePosted,
+          isVotePosted: true,
           votes: { ...e.votes, positive: e.votes.positive + 1 },
         };
       if (e.id === id && value === 'down')
         return {
           ...e,
-          isVotePosted: !e.isVotePosted,
+          isVotePosted: true,
           votes: { ...e.votes, negative: e.votes.negative + 1 },
         };
       return e;
@@ -65,7 +66,7 @@ const Home: NextPage = () => {
     setpeopleData(data);
   }, [data]);
 
-  if (error) return <div>Failed to load page</div>;
+  if (error) return <div>Failed to load data</div>;
 
   return (
     <Layout>

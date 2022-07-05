@@ -2,7 +2,7 @@ import { DesignType } from 'types/Types/Design';
 import { Sizes } from 'types/Types/Sizes';
 import { ThumbsType } from 'types/Types/Thumbs';
 
-interface IVote {
+export interface IVote {
   positive: number;
   negative: number;
 }

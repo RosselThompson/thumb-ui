@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Button } from 'components/Button/Button';
 import { GaugeBar } from 'components/GaugeBar/GaugeBar';
 import { Thumbs } from 'components/Thumbs/Thumbs';
-import { ICardProps } from 'types/Interfaces/Card/ICard';
+import { ICardProps, IVote } from 'types/Interfaces/Card/ICard';
 import { ThumbsType } from 'types/Types/Thumbs';
 import { capitalize } from 'utils/Capitalize';
-import { getPercentage } from 'utils/Percentage';
 import { getTimeStr } from 'utils/Time';
 import { getPrefixClassName } from 'utils/CardPrefix';
 import { getImageName } from 'utils/FileName';
@@ -27,6 +26,7 @@ export const Card: React.FC<ICardProps> = (props): JSX.Element => {
   } = props;
 
   const [votedFlag, setvotedFlag] = useState<boolean>(isVotePosted);
+  const [votesData, setvotesData] = useState<IVote>(votes);
   const [selectedThumbs, setselectedThumbs] = useState<ThumbsType | undefined>(
     undefined
   );
@@ -43,34 +43,30 @@ export const Card: React.FC<ICardProps> = (props): JSX.Element => {
   const isSelectedThumbUp = selectedThumbs === 'up';
   const isSelectedThumbDown = selectedThumbs === 'down';
 
-  const [positivePercentage, negativePercentage] = getPercentage(
-    votes.positive,
-    votes.negative
-  );
-
   const thumbsAvergage: ThumbsType =
-    positivePercentage > negativePercentage ? 'up' : 'down';
+    votesData.positive > votesData.negative ? 'up' : 'down';
 
   const timeStr = getTimeStr(new Date(lastUpdated));
   const timestamp = votedFlag
     ? 'Thank you for your vote!'
     : `${timeStr} ${capitalize(category)}`;
 
-  const toogleVotedFlag = () => setvotedFlag(!votedFlag);
-
   const onClickThumbsUp = () => setselectedThumbs('up');
   const onClickThumbsDown = () => setselectedThumbs('down');
   const onClickVoteButton = () => {
     if (votedFlag) {
-      toogleVotedFlag();
+      setvotedFlag(false);
     } else {
       onClick(id, selectedThumbs);
+      if (selectedThumbs === 'up')
+        setvotesData((c) => ({ ...c, positive: c.positive + 1 }));
+
+      if (selectedThumbs === 'down')
+        setvotesData((c) => ({ ...c, negative: c.negative + 1 }));
+
+      setvotedFlag(true);
     }
   };
-
-  useEffect(() => {
-    setvotedFlag(isVotePosted);
-  }, [isVotePosted]);
 
   return (
     <div
@@ -92,7 +88,7 @@ export const Card: React.FC<ICardProps> = (props): JSX.Element => {
               <p className={`${prefixClassName}__timestamp`}>{timestamp}</p>
               <div
                 className={`${prefixClassName}__buttons ${cardButtonsClassName}`}>
-                {!votedFlag && (
+                {!votedFlag ? (
                   <>
                     <Thumbs
                       type="up"
@@ -107,6 +103,8 @@ export const Card: React.FC<ICardProps> = (props): JSX.Element => {
                       onClick={onClickThumbsDown}
                     />
                   </>
+                ) : (
+                  <></>
                 )}
                 <Button
                   text={voteText}
@@ -120,8 +118,8 @@ export const Card: React.FC<ICardProps> = (props): JSX.Element => {
         </div>
         <div className={`${prefixClassName}__footer`}>
           <GaugeBar
-            positive={votes.positive}
-            negative={votes.negative}
+            positive={votesData.positive}
+            negative={votesData.negative}
             size={design === 'grid' ? 'sm' : size}
           />
         </div>
