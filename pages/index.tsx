@@ -1,21 +1,26 @@
-import React, { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
+import React, { useEffect, useState } from 'react';
+import useSwr from 'swr';
 import { Layout } from 'components/Layout/Layout';
 import { Card } from 'components/Card/Card';
-import { useDimensions } from 'hooks/useDimensions';
-import { getViewportSize } from 'utils/ViewportSize';
-import { DesignType } from '../types/Types/Design';
-import { getHomeCardsClassName } from 'utils/HomeCardClass';
 import { Dropdown } from 'components/Dropdown/Dropdown';
-import { DropdownFields } from 'constants/DropdownFields';
+import { Loader } from 'components/Loader/Loader';
+import { fetcher } from 'services/Fetcher';
+import { useDimensions } from 'hooks/useDimensions';
+import { apiPeople } from 'constants/Endpoints';
+import { DesignType } from 'types/Types/Design';
 import { IDropdownField } from 'types/Interfaces/Dropdown/IDropdown';
 import { ThumbsType } from 'types/Types/Thumbs';
-import { useLoadPage } from 'hooks/useLoadPage';
-import { Loader } from '../components/Loader/Loader';
+import { IPersonInfo } from 'types/Interfaces/Data/IData';
+import { DropdownFields } from 'constants/DropdownFields';
+import { getHomeCardsClassName } from 'utils/HomeCardClass';
+import { getViewportSize } from 'utils/ViewportSize';
 
 const Home: NextPage = () => {
   const { width } = useDimensions();
-  const { data, isLoading } = useLoadPage();
+  const { data, error } = useSwr(apiPeople, fetcher);
+  const [loadingButton, setloadingButton] = useState<string>('');
+  const [peopleData, setpeopleData] = useState<IPersonInfo[]>([]);
   const [design, setdesign] = useState<DesignType>('list');
 
   const size = getViewportSize(Number(width));
@@ -24,14 +29,43 @@ const Home: NextPage = () => {
   const onChangeDropdown = (value: IDropdownField) =>
     setdesign(value.value as DesignType);
 
-  const onClickVote = (id: number, value: ThumbsType | undefined) =>
-    console.log(id, value);
+  const onClickVote = (id: number, value: ThumbsType | undefined) => {
+    setloadingButton(`${id}-loading`);
+    setTimeout(() => {
+      const newData = updateData(id, value);
+      setpeopleData(newData);
+      setloadingButton('');
+    }, 1000);
+  };
+
+  const updateData = (id: number, value: ThumbsType | undefined) =>
+    peopleData.map((e) => {
+      if (e.id === id && value === 'up')
+        return {
+          ...e,
+          isVotePosted: !e.isVotePosted,
+          votes: { ...e.votes, positive: e.votes.positive + 1 },
+        };
+      if (e.id === id && value === 'down')
+        return {
+          ...e,
+          isVotePosted: !e.isVotePosted,
+          votes: { ...e.votes, negative: e.votes.negative + 1 },
+        };
+      return e;
+    });
 
   useEffect(() => {
     if (size === 'sm') setdesign('grid');
     if (size === 'md') setdesign('list');
     if (size === 'lg') setdesign('list');
   }, [size]);
+
+  useEffect(() => {
+    setpeopleData(data);
+  }, [data]);
+
+  if (error) return <div>Failed to load page</div>;
 
   return (
     <Layout>
@@ -45,13 +79,13 @@ const Home: NextPage = () => {
               )}
             </div>
           </div>
-          {isLoading ? (
+          {!data ? (
             <div className="home__loader">
               <Loader theme="light" size="md" />
             </div>
           ) : (
             <div className={cardsClassName}>
-              {data.map((element) => (
+              {peopleData?.map((element) => (
                 <React.Fragment key={`card-${element.id}`}>
                   <Card
                     id={element.id}
@@ -61,8 +95,8 @@ const Home: NextPage = () => {
                     picture={element.picture}
                     lastUpdated={element.lastUpdated}
                     votes={element.votes}
-                    isLoading={false}
-                    isVotePosted={false}
+                    isLoading={loadingButton === `${element.id}-loading`}
+                    isVotePosted={element.isVotePosted}
                     onClick={onClickVote}
                     design={design}
                     size={size}

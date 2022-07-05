@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from 'components/Button/Button';
 import { GaugeBar } from 'components/GaugeBar/GaugeBar';
 import { Thumbs } from 'components/Thumbs/Thumbs';
@@ -67,6 +67,10 @@ export const Card: React.FC<ICardProps> = (props): JSX.Element => {
       onClick(id, selectedThumbs);
     }
   };
+
+  useEffect(() => {
+    setvotedFlag(isVotePosted);
+  }, [isVotePosted]);
 
   return (
     <div

@@ -11,6 +11,7 @@ export const mockData = [
       positive: 23,
       negative: 36,
     },
+    isVotePosted: false,
   },
   {
     id: 2,
@@ -24,6 +25,7 @@ export const mockData = [
       positive: 418,
       negative: 324,
     },
+    isVotePosted: false,
   },
   {
     id: 3,
@@ -37,6 +39,7 @@ export const mockData = [
       positive: 45,
       negative: 97,
     },
+    isVotePosted: false,
   },
   {
     id: 4,
@@ -50,6 +53,7 @@ export const mockData = [
       positive: 18,
       negative: 3,
     },
+    isVotePosted: true,
   },
   {
     id: 5,
@@ -63,6 +67,7 @@ export const mockData = [
       positive: 1237,
       negative: 894,
     },
+    isVotePosted: false,
   },
   {
     id: 6,
@@ -76,5 +81,6 @@ export const mockData = [
       positive: 118,
       negative: 45,
     },
+    isVotePosted: false,
   },
 ];
