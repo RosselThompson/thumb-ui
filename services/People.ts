@@ -67,17 +67,10 @@ export const updatePerson = async (id: number, updatedDoc: IPersonInfo) => {
     where('id', '==', id)
   );
   const findPeople = await getDocs(q);
-  findPeople.forEach(async (person) => {
-    const getPerson = doc(db, 'people', person.id);
-    await updateDoc(getPerson, {
-      id: updatedDoc.id,
-      name: updatedDoc.name,
-      description: updatedDoc.description,
-      category: updatedDoc.category,
-      picture: updatedDoc.picture,
-      lastUpdated: updatedDoc.lastUpdated,
-      votes: updatedDoc.votes,
-      isVotePosted: updatedDoc.isVotePosted,
-    });
+  const getPerson = doc(db, 'people', findPeople.docs[0].id);
+  await updateDoc(getPerson, {
+    ...updatedDoc,
+    votes: updatedDoc.votes,
+    isVotePosted: updatedDoc.isVotePosted,
   });
 };

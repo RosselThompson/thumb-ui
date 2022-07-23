@@ -19,9 +19,8 @@ import { updatePerson } from 'services/People';
 
 const Home: NextPage = () => {
   const { width } = useDimensions();
-  const { data, error, mutate } = useSwr(apiPeople, fetcher);
+  const { data, error, mutate } = useSwr<IPersonInfo[]>(apiPeople, fetcher);
   const [loadingButton, setloadingButton] = useState<string>('');
-  const [peopleData, setpeopleData] = useState<IPersonInfo[]>([]);
   const [design, setdesign] = useState<DesignType>('list');
 
   const size = getViewportSize(Number(width));
@@ -30,17 +29,8 @@ const Home: NextPage = () => {
   const onChangeDropdown = (value: IDropdownField) =>
     setdesign(value.value as DesignType);
 
-  const onClickVote = async (id: number, value: ThumbsType | undefined) => {
-    setloadingButton(`${id}-loading`);
-    const newData = updateData(id, value);
-    const person = newData.find((e) => e.id === id);
-    await updatePerson(id, person as IPersonInfo);
-    await mutate(newData);
-    setloadingButton('');
-  };
-
   const updateData = (id: number, value: ThumbsType | undefined) =>
-    peopleData.map((e) => {
+    data?.map((e) => {
       if (e.id === id && value === 'up')
         return {
           ...e,
@@ -56,15 +46,20 @@ const Home: NextPage = () => {
       return e;
     });
 
+  const onClickVote = async (id: number, value: ThumbsType | undefined) => {
+    setloadingButton(`${id}-loading`);
+    const newData = updateData(id, value);
+    const person = newData?.find((e) => e.id === id);
+    await updatePerson(id, person as IPersonInfo);
+    mutate(newData);
+    setloadingButton('');
+  };
+
   useEffect(() => {
     if (size === 'sm') setdesign('grid');
     if (size === 'md') setdesign('list');
     if (size === 'lg') setdesign('list');
   }, [size]);
-
-  useEffect(() => {
-    setpeopleData(data);
-  }, [data]);
 
   if (error) return <div>Failed to load data</div>;
 
@@ -86,7 +81,7 @@ const Home: NextPage = () => {
             </div>
           ) : (
             <div className={cardsClassName}>
-              {peopleData?.map((element) => (
+              {data?.map((element) => (
                 <React.Fragment key={`card-${element.id}`}>
                   <Card
                     id={element.id}
