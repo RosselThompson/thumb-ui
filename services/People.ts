@@ -12,6 +12,9 @@ import {
   orderBy,
 } from 'firebase/firestore';
 import { IPersonInfo } from 'types/Interfaces/Data/IData';
+import { mockData } from 'mock/MockData';
+
+const appMode = process.env.NEXT_PUBLIC_MODE;
 
 export const personConverter = {
   toFirestore(person: IPersonInfo): DocumentData {
@@ -48,6 +51,11 @@ export const personConverter = {
 export const getPeople = async () => {
   const data: IPersonInfo[] = [];
 
+  if (appMode === 'OFFLINE') {
+    console.log('REQUEST ON OFFLINE MODE');
+    return mockData;
+  }
+
   const q = query(
     collection(db, 'people').withConverter(personConverter),
     orderBy('id', 'asc')
@@ -62,6 +70,16 @@ export const getPeople = async () => {
 };
 
 export const updatePerson = async (id: number, updatedDoc: IPersonInfo) => {
+  if (appMode === 'OFFLINE') {
+    console.log('REQUEST ON OFFLINE MODE');
+    const currentElement = mockData.find((e) => e.id === id);
+    return {
+      ...currentElement,
+      votes: updatedDoc.votes,
+      isVotePosted: updatedDoc.isVotePosted,
+    };
+  }
+
   const q = query(
     collection(db, 'people').withConverter(personConverter),
     where('id', '==', id)

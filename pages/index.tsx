@@ -5,7 +5,7 @@ import { Layout } from 'components/Layout/Layout';
 import { Card } from 'components/Card/Card';
 import { Dropdown } from 'components/Dropdown/Dropdown';
 import { Loader } from 'components/Loader/Loader';
-import { fetcher } from 'services/Fetcher';
+import { fetcher, postFetcher } from 'services/Fetcher';
 import { useDimensions } from 'hooks/useDimensions';
 import { apiPeople } from 'constants/Endpoints';
 import { DesignType } from 'types/Types/Design';
@@ -15,7 +15,6 @@ import { IPersonInfo } from 'types/Interfaces/Data/IData';
 import { DropdownFields } from 'constants/DropdownFields';
 import { getHomeCardsClassName } from 'utils/HomeCardClass';
 import { getViewportSize } from 'utils/ViewportSize';
-import { updatePerson } from 'services/People';
 
 const Home: NextPage = () => {
   const { width } = useDimensions();
@@ -31,17 +30,16 @@ const Home: NextPage = () => {
 
   const updateData = (id: number, value: ThumbsType | undefined) =>
     data?.map((e) => {
-      if (e.id === id && value === 'up')
+      if (e.id === id)
         return {
           ...e,
           isVotePosted: true,
-          votes: { ...e.votes, positive: e.votes.positive + 1 },
-        };
-      if (e.id === id && value === 'down')
-        return {
-          ...e,
-          isVotePosted: true,
-          votes: { ...e.votes, negative: e.votes.negative + 1 },
+          votes: {
+            ...e.votes,
+            ...(value === 'up'
+              ? { positive: e.votes.positive + 1 }
+              : { negative: e.votes.negative + 1 }),
+          },
         };
       return e;
     });
@@ -50,7 +48,7 @@ const Home: NextPage = () => {
     setloadingButton(`${id}-loading`);
     const newData = updateData(id, value);
     const person = newData?.find((e) => e.id === id);
-    await updatePerson(id, person as IPersonInfo);
+    await postFetcher(`${apiPeople}/${id}`, person);
     mutate(newData);
     setloadingButton('');
   };

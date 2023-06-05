@@ -18,6 +18,7 @@ yarn install
 
 Copy env variables from `.env.example` into `.env.local`.
 
+In order to run the app with data persistance remove offline mode from .env.example
 I'm sharing with you my firebase configuration in order to test this applications. This credential will be removed on 30 days
 
 ### 🔌 And then, start the dev local server.
